@@ -1,0 +1,80 @@
+dev :
+  - entityName: latest_launch
+    fileNamePattern: spacex_api_latest_launch.json
+    api_url: 'https://gateway.pipeworx.io/spacex/v4/launches/latest'
+    masterBucket: /opt/airflow/data/source_raw
+    destinationKeyPattern: /opt/airflow/data/work_bucket/spacex/latest_launch/year=\g<year>/month=\g<month>/day=\g<day>/\g<filename>
+    # DBT commands
+    dbtLoad:
+      - name: "run-bronze"
+        args: ["run", "--select", "select: intake_spacex.intake_latest_launch"]
+      - name: "run-silver"
+        args: ["run", "--select", "spacex.silver.latest_launch"]
+      - name: "test-circana-map"
+        args: ["test", "--select", "latest__launch"]
+  - entityName: next_launch
+    fileNamePattern: spacex_api_next_launch.json
+    api_url: 'https://gateway.pipeworx.io/spacex/v4/launches/next'
+    masterBucket: /opt/airflow/data/source_raw
+    destinationKeyPattern: /opt/airflow/data/work_bucket/spacex/next_launch/year=\g<year>/month=\g<month>/day=\g<day>/\g<filename>
+    # DBT commands
+    dbtLoad:
+      - name: "run-bronze"
+        args: ["run", "--select", "select: intake_spacex.intake_next_launch"]
+      - name: "run-silver"
+        args: ["run", "--select", "spacex.silver.next_launch"]
+      - name: "test-circana-map"
+        args: ["test", "--select", "next__launch"]
+  - entityName: past_launches
+    fileNamePattern: spacex_api_past_launches.json
+    api_url: 'https://gateway.pipeworx.io/spacex/v4/launches/past?limit=5'
+    masterBucket: /opt/airflow/data/source_raw
+    destinationKeyPattern: /opt/airflow/data/work_bucket/spacex/past_launches/year=\g<year>/month=\g<month>/day=\g<day>/\g<filename>
+    # DBT commands
+    dbtLoad:
+      - name: "run-bronze"
+        args: ["run", "--select", "select: intake_spacex.intake_past_launch"]
+      - name: "run-silver"
+        args: ["run", "--select", "spacex.silver.past_launch"]
+      - name: "test-circana-map"
+        args: ["test", "--select", "past__launch"]
+
+  - entityName: rockets
+    fileNamePattern: spacex_api_rockets.json
+    api_url: 'https://gateway.pipeworx.io/spacex/v4/rockets'
+    masterBucket: /opt/airflow/data/source_raw
+    destinationKeyPattern: /opt/airflow/data/work_bucket/spacex/rockets/year=\g<year>/month=\g<month>/day=\g<day>/\g<filename>
+    # DBT commands
+    dbtLoad:
+      - name: "run-bronze"
+        args: ["run", "--select", "select: intake_spacex.intake_rockets"]
+      - name: "run-silver"
+        args: ["run", "--select", "spacex.silver.rockets"]
+      - name: "test-circana-map"
+        args: ["test", "--select", "rockets"]
+  - entityName: crew
+    fileNamePattern: spacex_api_crew.json
+    api_url: 'https://gateway.pipeworx.io/spacex/v4/crew'
+    masterBucket: /opt/airflow/data/source_raw
+    destinationKeyPattern: /opt/airflow/data/work_bucket/spacex/crew/year=\g<year>/month=\g<month>/day=\g<day>/\g<filename>
+    # DBT commands
+    dbtLoad:
+      - name: "run-bronze"
+        args: ["run", "--select", "select: intake_spacex.intake_crew"]
+      - name: "run-silver"
+        args: ["run", "--select", "spacex.silver.crew"]
+      - name: "test-circana-map"
+        args: ["test", "--select", "crew"]
+  - entityName: starlink
+    fileNamePattern: spacex_api_starlink.json
+    api_url: 'https://gateway.pipeworx.io/spacex/v4/starlink?limit=10'
+    masterBucket: /opt/airflow/data/source_raw
+    destinationKeyPattern: /opt/airflow/data/work_bucket/spacex/starlink/year=\g<year>/month=\g<month>/day=\g<day>/\g<filename>
+    # DBT commands
+    dbtLoad:
+      - name: "run-bronze"
+        args: ["run", "--select", "select: intake_spacex.intake_starlink"]
+      - name: "run-silver"
+        args: ["run", "--select", "spacex.silver.starlink"]
+      - name: "test-circana-map"
+        args: ["test", "--select", "starlink"]

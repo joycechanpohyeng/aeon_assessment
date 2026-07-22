@@ -1,0 +1,175 @@
+version: 2
+
+sources:
+  - name: intake_spacex
+    database: analytics_db
+    schema: bronze_staging
+    
+    tables:
+      - name: intake_latest_launch
+        meta:
+          external: >
+            select 
+              json_data as raw_json,
+              cast(json_extract_string(json_data, '$.StatusCode') as int) as status_code,
+              cast(json_extract_string(json_data, '$.StatusDescription') as varchar) as status_description,
+              json_extract_string(json_data, '$.Content') as payload,
+              cast(json_extract_string(json_data, '$.RawContent') as varchar) as raw_content,
+              cast(json_extract_string(json_data, '$.RawContentLength') as int) as raw_content_length,
+
+              cast(json_extract_string(json_data, '$.Forms') as int) as forms,
+              cast(json_extract_string(json_data, '$.Headers') as int) as headers,
+              cast(json_extract_string(json_data, '$.Images') as int) as images,
+              cast(json_extract_string(json_data, '$.InputFields') as int) as input_fields,
+              cast(json_extract_string(json_data, '$.Links') as int) as links,
+              cast(json_extract_string(json_data, '$.ParsedHtml') as int) as parsed_html,
+
+              make_date(
+                cast(str_split({{ var('filepath') }}, '/')[4] as int),
+                cast(str_split({{ var('filepath') }}, '/')[3] as int),
+                cast(str_split({{ var('filepath') }}, '/')[2] as int)
+              ) as date_partition
+            from read_json_auto(
+              '/opt/airflow/data/source_raw/latest_launch/*/*/*/spacex_api_latest_launch.json',
+              filename=true,
+              format='unstructured'
+            ) as json_data
+
+      - name: intake_next_launch
+        meta:
+          external: >
+            select 
+              json_data as raw_json,
+              cast(json_extract_string(json_data, '$.StatusCode') as int) as status_code,
+              cast(json_extract_string(json_data, '$.StatusDescription') as varchar) as status_description,
+              json_extract_string(json_data, '$.Content') as payload,
+              cast(json_extract_string(json_data, '$.RawContent') as varchar) as raw_content,
+              cast(json_extract_string(json_data, '$.RawContentLength') as int) as raw_content_length,
+
+              cast(json_extract_string(json_data, '$.Forms') as int) as forms,
+              cast(json_extract_string(json_data, '$.Headers') as int) as headers,
+              cast(json_extract_string(json_data, '$.Images') as int) as images,
+              cast(json_extract_string(json_data, '$.InputFields') as int) as input_fields,
+              cast(json_extract_string(json_data, '$.Links') as int) as links,
+              cast(json_extract_string(json_data, '$.ParsedHtml') as int) as parsed_html,
+
+              make_date(
+                cast(str_split({{ var('filepath') }}, '/')[4] as int),
+                cast(str_split({{ var('filepath') }}, '/')[3] as int),
+                cast(str_split({{ var('filepath') }}, '/')[2] as int)
+              ) as date_partition
+            from read_json_auto(
+              '/opt/airflow/data/source_raw/next_launch/*/*/*/spacex_api_next_launch.json',
+              filename=true,
+              format='unstructured'
+            ) as json_data
+
+      - name: intake_past_launches
+        meta:
+          external: >
+            select 
+              json_data as raw_json,
+              cast(json_extract_string(json_data, '$.StatusCode') as int) as status_code,
+              cast(json_extract_string(json_data, '$.StatusDescription') as varchar) as status_description,
+              json_extract_string(json_data, '$.Content') as payload,
+              cast(json_extract_string(json_data, '$.RawContent') as varchar) as raw_content,
+              cast(json_extract_string(json_data, '$.RawContentLength') as int) as raw_content_length,
+              make_date(
+                cast(str_split({{ var('filepath') }}, '/')[4] as int),
+                cast(str_split({{ var('filepath') }}, '/')[3] as int),
+                cast(str_split({{ var('filepath') }}, '/')[2] as int)
+              ) as date_partition
+            from read_json_auto(
+              '/opt/airflow/data/source_raw/past_launches/*/*/*/spacex_api_past_launches.json',
+              filename=true,
+              format='unstructured'
+            ) as json_data
+
+      - name: intake_rockets
+        meta:
+          external: >
+            select 
+              json_data as raw_json,
+              cast(json_extract_string(json_data, '$.StatusCode') as int) as status_code,
+              cast(json_extract_string(json_data, '$.StatusDescription') as varchar) as status_description,
+              json_extract_string(json_data, '$.Content') as payload,
+              cast(json_extract_string(json_data, '$.RawContent') as varchar) as raw_content,
+              cast(json_extract_string(json_data, '$.RawContentLength') as int) as raw_content_length,
+
+              cast(json_extract_string(json_data, '$.Forms') as int) as forms,
+              cast(json_extract_string(json_data, '$.Headers') as int) as headers,
+              cast(json_extract_string(json_data, '$.Images') as int) as images,
+              cast(json_extract_string(json_data, '$.InputFields') as int) as input_fields,
+              cast(json_extract_string(json_data, '$.Links') as int) as links,
+              cast(json_extract_string(json_data, '$.ParsedHtml') as int) as parsed_html,
+
+              make_date(
+                cast(str_split({{ var('filepath') }}, '/')[4] as int),
+                cast(str_split({{ var('filepath') }}, '/')[3] as int),
+                cast(str_split({{ var('filepath') }}, '/')[2] as int)
+              ) as date_partition
+            from read_json_auto(
+              '/opt/airflow/data/source_raw/rockets/*/*/*/spacex_api_rockets.json',
+              filename=true,
+              format='unstructured'
+            ) as json_data
+
+      - name: intake_crew
+        meta:
+          external: >
+            select 
+              json_data as raw_json,
+              cast(json_extract_string(json_data, '$.StatusCode') as int) as status_code,
+              cast(json_extract_string(json_data, '$.StatusDescription') as varchar) as status_description,
+              json_extract_string(json_data, '$.Content') as payload,
+              cast(json_extract_string(json_data, '$.RawContent') as varchar) as raw_content,
+              cast(json_extract_string(json_data, '$.RawContentLength') as int) as raw_content_length,
+
+              cast(json_extract_string(json_data, '$.Forms') as int) as forms,
+              cast(json_extract_string(json_data, '$.Headers') as int) as headers,
+              cast(json_extract_string(json_data, '$.Images') as int) as images,
+              cast(json_extract_string(json_data, '$.InputFields') as int) as input_fields,
+              cast(json_extract_string(json_data, '$.Links') as int) as links,
+              cast(json_extract_string(json_data, '$.ParsedHtml') as int) as parsed_html,
+
+
+              make_date(
+                cast(str_split({{ var('filepath') }}, '/')[4] as int),
+                cast(str_split({{ var('filepath') }}, '/')[3] as int),
+                cast(str_split({{ var('filepath') }}, '/')[2] as int)
+              ) as date_partition
+            from read_json_auto(
+              '/opt/airflow/data/source_raw/crew/*/*/*/spacex_api_crew.json',
+              filename=true,
+              format='unstructured'
+            ) as json_data
+
+      - name: intake_startlink
+        meta:
+          external: >
+            select 
+              json_data as raw_json,
+              cast(json_extract_string(json_data, '$.StatusCode') as int) as status_code,
+              cast(json_extract_string(json_data, '$.StatusDescription') as varchar) as status_description,
+              json_extract_string(json_data, '$.Content') as payload,
+              cast(json_extract_string(json_data, '$.RawContent') as varchar) as raw_content,
+              cast(json_extract_string(json_data, '$.RawContentLength') as int) as raw_content_length,
+
+              cast(json_extract_string(json_data, '$.Forms') as int) as forms,
+              cast(json_extract_string(json_data, '$.Headers') as int) as headers,
+              cast(json_extract_string(json_data, '$.Images') as int) as images,
+              cast(json_extract_string(json_data, '$.InputFields') as int) as input_fields,
+              cast(json_extract_string(json_data, '$.Links') as int) as links,
+              cast(json_extract_string(json_data, '$.ParsedHtml') as int) as parsed_html,
+
+              
+              make_date(
+                cast(str_split({{ var('filepath') }}, '/')[4] as int),
+                cast(str_split({{ var('filepath') }}, '/')[3] as int),
+                cast(str_split({{ var('filepath') }}, '/')[2] as int)
+              ) as date_partition
+            from read_json_auto(
+              '/opt/airflow/data/source_raw/crew/*/*/*/spacex_api_starlink.json',
+              filename=true,
+              format='unstructured'
+            ) as json_data

@@ -1,0 +1,44 @@
+# Name of your project (must match the reference name used in your profiles and selectors)
+name: 'spacex_dbt'
+version: '1.0.0'
+config-version: 2
+
+# This profile name MUST match the top-level block inside your spacex_profile.yml
+profile: 'spacex_profile'
+
+# File path configurations telling dbt where to find your files inside the container
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Clean directory mapping for output targets
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# ==============================================================================
+# MODEL CONFIGURATIONS
+# ==============================================================================
+# This section defines how your models will be built inside DuckDB.
+models:
+  spacex_dbt:
+    # 1. Staging Layer: Lightweight data cleaning (Views are fastest here)
+    staging:
+      +materialized: view
+      +schema: staging
+
+    # 2. Marts Layer: Core analytics layer (Tables are best for querying)
+    marts:
+      +materialized: table
+      +schema: marts
+
+
+
+vars:
+  targetDatabase: DEV
+  targetSchema: SPACEX
+  filepath: /opt/airflow/data/source_raw/
+  intakeDate: '20211205:130992'

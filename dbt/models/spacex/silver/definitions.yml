@@ -1,0 +1,365 @@
+version: 2
+
+models:
+  - name: crew
+    description: >
+      Target table for crew
+    data_tests:
+      - custom_test_sample:
+          arguments:
+            target_table: '{{ ref("latest_launch") }}'
+            intake_date: '{{(var("intakeDate")|string)[:4]}}-{{(var("intakeDate")|string)[4:6]}}-{{(var("intakeDate")|string)[6:8]}}'
+            product_key: 'Comscore|Visitation'
+          tags: [ 'spacex-crew' ]
+          alias: 'test1'
+          meta: {
+            'description': 'generic test on static value of launch_id',
+            'quality_dimension': 'consistency' }
+    columns:
+      - name: launch_id
+        type: varchar
+        data_tests:
+          - unique:
+              tags: [ 'spacex-crew' ]
+              alias: 'launch_id-unique'
+      - name: launch_pad
+        type: varchar(200)
+        description: 
+      - name: launch_name
+        type: varchar(200)
+        description: 
+      - name: flight_number
+        type: BIGINT
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: is_successful
+        type: boolen
+        description: 
+      - name: raw_content
+        type: object
+        description: 
+      - name: raw_content_length
+        type: bigint
+        description: 
+      - name: headers
+        type: varchar
+        description: 
+      - name: images
+        type: varchar
+        description: 
+      - name: input_fields
+        type: varchar
+        description: 
+      - name: links
+        type: varchar
+        description: 
+      - name: parsed_html
+        type: varchar
+        description: 
+      - name: date_partition
+        type: date
+        description: 
+      - name: launch_stream
+        type: varchar(20)
+        data_test:
+          - accepted_values:
+              values: ['crew'] 
+  - name: latest__launch
+    description: >
+      Target table for latest
+    columns:
+      - name: launch_id
+        type: varchar
+        data_tests:
+          - unique:
+              tags: [ 'spacex-latest' ]
+              alias: 'launch_id-unique'
+      - name: launch_pad
+        type: varchar(200)
+        description: 
+      - name: launch_name
+        type: varchar(200)
+        description: 
+      - name: flight_number
+        type: BIGINT
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: is_successful
+        type: boolen
+        description: 
+      - name: raw_content
+        type: object
+        description: 
+      - name: raw_content_length
+        type: bigint
+        description: 
+      - name: headers
+        type: varchar
+        description: 
+      - name: images
+        type: varchar
+        description: 
+      - name: input_fields
+        type: varchar
+        description: 
+      - name: links
+        type: varchar
+        description: 
+      - name: parsed_html
+        type: varchar
+        description: 
+      - name: date_partition
+        type: date
+        description: 
+      - name: launch_stream
+        type: varchar(20)
+        data_test:
+          - accepted_values:
+              values: ['latest'] 
+
+  - name: next__launch
+    description: >
+      Target table for next
+    columns:
+      - name: launch_id
+        type: varchar
+        data_tests:
+          - unique:
+              tags: [ 'spacex-next' ]
+              alias: 'launch_id-unique'
+      - name: launch_pad
+        type: varchar(200)
+        description: 
+      - name: launch_name
+        type: varchar(200)
+        description: 
+      - name: flight_number
+        type: BIGINT
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: is_successful
+        type: boolen
+        description: 
+      - name: raw_content
+        type: object
+        description: 
+      - name: raw_content_length
+        type: bigint
+        description: 
+      - name: headers
+        type: varchar
+        description: 
+      - name: images
+        type: varchar
+        description: 
+      - name: input_fields
+        type: varchar
+        description: 
+      - name: links
+        type: varchar
+        description: 
+      - name: parsed_html
+        type: varchar
+        description: 
+      - name: date_partition
+        type: date
+        description: 
+      - name: launch_stream
+        type: varchar(20)
+        data_test:
+          - accepted_values:
+              values: ['next'] 
+    
+  - name: past__launch
+    description: >
+      Target table for past
+    columns:
+      - name: launch_id
+        type: varchar
+        data_tests:
+          - unique:
+              tags: [ 'spacex-past' ]
+              alias: 'launch_id-unique'
+      - name: launch_pad
+        type: varchar(200)
+        description: 
+      - name: launch_name
+        type: varchar(200)
+        description: 
+      - name: flight_number
+        type: BIGINT
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: is_successful
+        type: boolen
+        description: 
+      - name: raw_content
+        type: object
+        description: 
+      - name: raw_content_length
+        type: bigint
+        description: 
+      - name: headers
+        type: varchar
+        description: 
+      - name: images
+        type: varchar
+        description: 
+      - name: input_fields
+        type: varchar
+        description: 
+      - name: links
+        type: varchar
+        description: 
+      - name: parsed_html
+        type: varchar
+        description: 
+      - name: date_partition
+        type: date
+        description: 
+      - name: launch_stream
+        type: varchar(20)
+        data_test:
+          - accepted_values:
+              values: ['past'] 
+
+
+  - name: rockets
+    description: >
+      Target table for rockets
+    columns:
+      - name: launch_id
+        type: varchar
+        data_tests:
+          - unique:
+              tags: [ 'spacex-rockets' ]
+              alias: 'launch_id-unique'
+      - name: launch_pad
+        type: varchar(200)
+        description: 
+      - name: launch_name
+        type: varchar(200)
+        description: 
+      - name: flight_number
+        type: BIGINT
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: is_successful
+        type: boolen
+        description: 
+      - name: raw_content
+        type: object
+        description: 
+      - name: raw_content_length
+        type: bigint
+        description: 
+      - name: headers
+        type: varchar
+        description: 
+      - name: images
+        type: varchar
+        description: 
+      - name: input_fields
+        type: varchar
+        description: 
+      - name: links
+        type: varchar
+        description: 
+      - name: parsed_html
+        type: varchar
+        description: 
+      - name: date_partition
+        type: date
+        description: 
+      - name: launch_stream
+        type: varchar(20)
+        data_test:
+          - accepted_values:
+              values: ['rockets'] 
+
+
+  - name: starlink__launch
+    description: >
+      Target table for starlink
+    columns:
+      - name: launch_id
+        type: varchar
+        data_tests:
+          - unique:
+              tags: [ 'spacex-crew' ]
+              alias: 'launch_id-unique'
+      - name: launch_pad
+        type: varchar(200)
+        description: 
+      - name: launch_name
+        type: varchar(200)
+        description: 
+      - name: flight_number
+        type: BIGINT
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: launch_at_utc
+        type: date
+        description: 
+      - name: is_successful
+        type: boolen
+        description: 
+      - name: raw_content
+        type: object
+        description: 
+      - name: raw_content_length
+        type: bigint
+        description: 
+      - name: headers
+        type: varchar
+        description: 
+      - name: images
+        type: varchar
+        description: 
+      - name: input_fields
+        type: varchar
+        description: 
+      - name: links
+        type: varchar
+        description: 
+      - name: parsed_html
+        type: varchar
+        description: 
+      - name: date_partition
+        type: date
+        description: 
+      - name: launch_stream
+        type: varchar(20)
+        data_test:
+          - accepted_values:
+              values: ['starlink'] 
+
+
+    
