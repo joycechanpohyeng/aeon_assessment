@@ -3,8 +3,8 @@ name: 'spacex_dbt'
 version: '1.0.0'
 config-version: 2
 
-# This profile name MUST match the top-level block inside your spacex_profile.yml
-profile: 'spacex_profile'
+# This profile name MUST match the top-level block inside your default.yml
+profile: default
 
 # File path configurations telling dbt where to find your files inside the container
 model-paths: ["models"]
@@ -24,7 +24,7 @@ clean-targets:
 # ==============================================================================
 # This section defines how your models will be built inside DuckDB.
 models:
-  spacex_dbt:
+  dbt:
     # 1. Staging Layer: Lightweight data cleaning (Views are fastest here)
     staging:
       +materialized: view

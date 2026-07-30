@@ -96,10 +96,10 @@ The orchestration stack was initialized using `docker compose up`. The following
 ```
 
 ### 1. High-Performance Schema-on-Read (DuckDB)
-Instead of forcing ingestion tasks to perform row-by-row structural data modifications or slow warehouse inserts, the raw files are dropped directly into storage. DuckDB's engine is mounted downstream to parse unstructured JSON data pools instantly using `read_json_auto(format='unstructured')`. (previously, I'm using snowflake and storage integration to load file(s3) into snowflake external stage location)
+DuckDB's engine is mounted downstream to parse unstructured JSON data pools instantly using `read_json_auto(format='unstructured')`. (previously, I'm using snowflake and storage integration to load file(s3) into snowflake external stage location)
 
 
 ### 2. Date Partitioning & Idempotency
 `intakeDate` string matching Airflow's execution date (`kwargs["ds"]`) is passed from the orchestrator into the dbt compilation scope. 
 
-Downstream Silver staging models are built using an `incremental` materialization with an `insert+delete` strategy. This sets up a **Delete-and-Insert** data structure: if an execution block for a specific date is re-triggered, previous historical entries for that partition are atomically dropped before the fresh records are merged, preventing duplicate values.
+Downstream Silver staging models are built using an `incremental` materialization with an `insert+delete` strategy. This sets up a **Delete-and-Insert** data structure: if an execution block for a specific date is re-triggered, previous historical entries for that partition are automically dropped before the fresh records are merged, preventing duplicate values.

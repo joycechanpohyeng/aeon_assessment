@@ -172,10 +172,10 @@ def main():
             def dbt_load_entity_level(dbt_load, entity_name, **kwargs):
                 dbt_tasks = []
                 previous_task = None
-                current_dt = datetime.strptime(kwargs["ds"], "%Y-%m-%d")
+                
                 for dbt_item in dbt_load:
                     dbt_task_name = dbt_item['name']
-                    cmd_args = dbt_item['args'] + ["--vars", f'{{"intakeDate": "{kwargs["ds"]}"}}']
+                    cmd_args = dbt_item["args"] + ["--vars", '{"intakeDate": "{{ ds }}"}']
                     current_task_id = f"dbt-{dbt_task_name}-{entity_name}"
                     
                     current_task = KubernetesPodOperator(
